@@ -1,0 +1,43 @@
+<ul class="menu">
+    <li><a href="{% url 'main' %}"{% if request.resolver_match.url_name == 'main' %}
+           class="active" {% endif %}>домой</a></li>
+    <li><a href="{% url 'mainapp:index' %}"{% if request.resolver_match.namespace == 'products' %}
+           class="active" {% endif %} >продукты</a></li>
+    <li><a href="{% url 'contact' %}"{% if request.resolver_match.url_name == 'contact' %} class="active" {% endif %}>контакты</a>
+    </li>
+    {% if user.is_authenticated %}
+        <li>
+            <a href="{% url 'authapp:edit' %}">
+                {% if user.first_name %}{{ user.first_name }}
+                {% else %}
+                    пользователь
+                {% endif %}
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'authapp:logout' %}">
+                выход
+            </a>
+        </li>
+    {% else %}
+        <li>
+            <a href="{% url 'authapp:login' %}">
+                вход
+            </a>
+        </li>
+    {% endif %}
+    {% if user.is_superuser %}
+        <li>
+            <a href="{% url 'admin:users' %}">админка</a>
+        </li>
+    {% endif %}
+
+</ul>
+<a href="#" class="search"></a>
+<a href="{% url 'basket:basket' %}" class="basket">
+    <span>
+        {% if basket %}
+            {{ basket.0.all_cost|floatformat:0 }} rur ({{ basket.0.total_q }})
+        {% endif %}
+    </span>
+</a>
